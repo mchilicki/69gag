@@ -6,22 +6,23 @@ from django.core.serializers.python import Serializer as PythonSerializer
 from django.core.serializers.base import Serializer as BaseSerializer
 
 
-class MemeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Meme
-        fields = ['user', 'title', 'img_url', 'date']
-
-
-class LikeSerializer(serializers.HyperlinkedModelSerializer):
+class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['user', 'meme', 'date']
+        fields = '__all__'
 
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['user', 'meme', 'content', 'date']
+        fields = '__all__'
+
+
+class MemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Meme
+        fields = '__all__'
 
 
 class ExtBaseSerializer(BaseSerializer):
@@ -43,8 +44,10 @@ class ExtBaseSerializer(BaseSerializer):
 
         super(ExtBaseSerializer, self).end_object(obj)
 
+
 class ExtPythonSerializer(ExtBaseSerializer, PythonSerializer):
     pass
+
 
 class ExtJsonSerializer(ExtPythonSerializer, JsonSerializer):
     pass

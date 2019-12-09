@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.core import serializers
 
 
 class Meme(models.Model):
@@ -10,18 +9,21 @@ class Meme(models.Model):
     date = models.DateTimeField(default=timezone.now)
 
     @property
+    def userName(self):
+        return self.user.username
+
+    @property
     def NumLikes(self):
-        return self.likes.count()
+        return Like.objects.filter(meme__pk=self.pk).count()
 
     @property
     def NumComments(self):
-        return self.comments.count()
+        return Comment.objects.filter(meme__pk=self.pk).count()
 
     @property
     def Comments(self):
-        comments = self.comments.all()
-        data = serializers.serialize('json', comments)
-        return data
+        queryset = list(self.comments.values('pk', 'user__username', 'content', 'date'))
+        return queryset
 
 
 class Like(models.Model):

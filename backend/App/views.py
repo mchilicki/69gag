@@ -1,13 +1,10 @@
-from itertools import chain
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.core import serializers
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 
-from App.serializers import ExtJsonSerializer
+from .serializers import ExtJsonSerializer
 from .models import Meme, Like, Comment
 
 
@@ -32,9 +29,10 @@ class MemeGetAllView(APIView):
     def get(self, *args, **kwargs):
         json_data = json.loads(self.request.body)
         read_id = json_data['read_id']
-        querysetMemes = Meme.objects.filter(pk__range=(read_id + 1, read_id + 11))
-        output = ExtJsonSerializer().serialize(querysetMemes, props=['NumLikes', 'NumComments'])
+        querysetMemes = list(Meme.objects.filter(pk__range=(read_id + 1, read_id + 11)))
+        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'], props=['userName', 'NumLikes', 'NumComments'])
         return HttpResponse(output, content_type="application/json")
+
 
 class MemeGetView(APIView):
     permission_classes = [AllowAny]
@@ -43,7 +41,7 @@ class MemeGetView(APIView):
         json_data = json.loads(self.request.body)
         meme_id = json_data['meme_id']
         querysetMemes = Meme.objects.filter(pk=meme_id)
-        output = ExtJsonSerializer().serialize(querysetMemes, props=['NumLikes', 'NumComments', 'Comments'])
+        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'], props=['userName', 'NumLikes', 'NumComments', 'Comments'])
         return HttpResponse(output, content_type="application/json")
 
 
@@ -55,6 +53,7 @@ class LikeAddView(APIView):
         user = self.request.user
         meme_id = json_data['meme_id']
         meme = Meme.objects.get(pk=meme_id)
+        # actLike = Like.objects.filter(meme__pk=meme_id, user__pk=user.pk)
         like = Like(user=user, meme=meme)
         like.save()
         return Response(status=200)
