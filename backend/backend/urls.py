@@ -25,9 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('addmeme/', views.MemeAddView.as_view(), name='addmeme'),
-    path('getallmeme/', views.MemeGetAllView.as_view(), name='getmeme'),
-    path('getmeme/', views.MemeGetView.as_view(), name='getmeme'),
+    path('meme/', views.MemeView.as_view(), name='addmeme'),
+    path('getallmeme/<int:id>', views.MemeGetAllView.as_view(), name='getmeme'),
+    path('meme/<int:id>', views.MemeView.as_view(), name='getmeme'),
     path('addlike/', views.LikeAddView.as_view(), name='addlike'),
     path('addcomment/', views.CommentAddView.as_view(), name='addcomment'),
 ]
