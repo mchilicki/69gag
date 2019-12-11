@@ -1,0 +1,22 @@
+--django
+
+pip install pipenv
+
+pip install Django
+
+pip install djangorestframework
+
+pip install djangorestframework_simplejwt
+
+pip install -U drf-yasg
+
+polecenia do uruchomienia serwera:
+
+baza danych:
+python manage.py migrate
+
+utworzenie super usera:
+python manage.py createsuperuser
+
+uruchomienie serwera:
+python manage.py runserver
