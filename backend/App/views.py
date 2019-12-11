@@ -16,18 +16,13 @@ class MemeGetAllView(APIView):
     def get(self, *args, **kwargs):
         read_id = kwargs['id']
         querysetMemes = list(Meme.objects.filter(pk__range=(read_id + 1, read_id + 11)))
-        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'], props=['userName', 'NumLikes', 'NumComments'])
+        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'],
+                                               props=['userName', 'NumLikes', 'NumComments'])
         return HttpResponse(output, content_type="application/json")
 
 
-class MemeView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, *args, **kwargs):
-        meme_id = kwargs['id']
-        querysetMemes = Meme.objects.filter(pk=meme_id)
-        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'], props=['userName', 'NumLikes', 'NumComments', 'Comments'])
-        return HttpResponse(output, content_type="application/json")
+class MemeAddView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, *args, **kwargs):
         json_data = json.loads(self.request.body)
@@ -37,6 +32,17 @@ class MemeView(APIView):
         meme = Meme(user=user, title=title, img_url=img_url)
         meme.save()
         return Response(status=201)
+
+
+class MemeGetView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, *args, **kwargs):
+        meme_id = kwargs['id']
+        querysetMemes = Meme.objects.filter(pk=meme_id)
+        output = ExtJsonSerializer().serialize(querysetMemes, fields=['title', 'img_url', 'date'],
+                                               props=['userName', 'NumLikes', 'NumComments', 'Comments'])
+        return HttpResponse(output, content_type="application/json")
 
 
 class LikeAddView(APIView):
