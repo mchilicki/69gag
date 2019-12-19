@@ -44,8 +44,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('meme/', views.MemeAddView.as_view(), name='addmeme'),
-    path('getallmeme/<int:id>', views.MemeGetAllView.as_view(), name='getmeme'),
+    path('allmeme/<int:id>', views.MemeGetAllView.as_view(), name='getmeme'),
     path('meme/<int:id>', views.MemeGetView.as_view(), name='getmeme'),
-    path('addlike/', views.LikeAddView.as_view(), name='addlike'),
-    path('addcomment/', views.CommentAddView.as_view(), name='addcomment'),
+    path('like/<int:id>', views.LikeAddView.as_view(), name='addlike'),
+    path('comment/<int:id>', views.CommentAddView.as_view(), name='addcomment'),
 ]
