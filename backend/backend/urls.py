@@ -26,16 +26,17 @@ from drf_yasg import openapi
 from App import views
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="69gag API",
-      default_version='v1',
-      description="funnier than 9gag (look at code)",
-      terms_of_service="https://github.com/mchilicki/69gag.git",
-      contact=openapi.Contact(email="contact@69gag.com"),
-      license=openapi.License(name="MIT License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+    openapi.Info(
+        title="69gag API",
+        default_version='v1',
+        description="funnier than 9gag (look at code)",
+        terms_of_service="https://github.com/mchilicki/69gag.git",
+        contact=openapi.Contact(email="contact@69gag.com"),
+        license=openapi.License(name="MIT License"),
+    ),
+
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
@@ -44,8 +45,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('meme/', views.MemeAddView.as_view(), name='addmeme'),
-    path('allmeme/<int:id>', views.MemeGetAllView.as_view(), name='getmeme'),
-    path('meme/<int:id>', views.MemeGetView.as_view(), name='getmeme'),
-    path('like/<int:id>', views.LikeAddView.as_view(), name='addlike'),
-    path('comment/<int:id>', views.CommentAddView.as_view(), name='addcomment'),
+    path('allmeme/<int:meme_id>', views.MemeGetAllView.as_view(), name='getmeme'),
+    path('meme/<int:meme_id>', views.MemeGetView.as_view(), name='getmeme'),
+    path('like/<int:meme_id>', views.LikeView.as_view(), name='addlike'),
+    path('like/<int:meme_id>', views.LikeView.as_view(), name='deletelike'),
+    path('comment/<int:meme_id>', views.CommentAddView.as_view(), name='addcomment'),
 ]

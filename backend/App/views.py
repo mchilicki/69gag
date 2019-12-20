@@ -1,10 +1,12 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import json
 from django.http import HttpResponse
 
-from .serializers import ExtJsonSerializer
+from .serializers import ExtJsonSerializer, MemeSerializer
 from .models import Meme, Like, Comment
 
 
@@ -13,8 +15,22 @@ from .models import Meme, Like, Comment
 class MemeGetAllView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='ID of meme', required=True)
+        ],
+        responses={
+            '200': 'Returned memes from range meme_id + 1 to meme_id + 11',
+            '401': 'Unauthorized',
+            '404': 'Memes not found'
+        },
+        security=(AllowAny,),
+        operation_id='Get list of 10 memes',
+        operation_description='List of 10 memes, start with meme_id + 1',
+    )
     def get(self, *args, **kwargs):
-        read_id = kwargs['id']
+        read_id = kwargs['meme_id']
         queryset_memes = list(Meme.objects.filter(pk__range=(read_id + 1, read_id + 11)))
         if not queryset_memes:
             return HttpResponse(status=404, content_type="application/json")
@@ -28,6 +44,20 @@ class MemeGetAllView(APIView):
 class MemeAddView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                    properties={
+                                        'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of meme'),
+                                        'img_url': openapi.Schema(type=openapi.TYPE_STRING, description='URL of meme image'),
+                                    }),
+        responses={
+            '201': 'Meme added successfully',
+            '400': 'Cannot parse request body',
+            '401': 'Unauthorized'
+        },
+        operation_id='Add meme',
+        operation_description='Add new meme with title and URL to image',
+    )
     def post(self, *args, **kwargs):
         try:
             json_data = json.loads(json.dumps(self.request.data))
@@ -45,22 +75,48 @@ class MemeAddView(APIView):
 class MemeGetView(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='ID of meme', required=True)
+        ],
+        responses={
+            '200': 'Returned selected meme',
+            '401': 'Unauthorized',
+            '404': 'Meme not found'
+        },
+        operation_id='Get meme',
+        operation_description='Returns meme specified by meme_id',
+    )
     def get(self, *args, **kwargs):
-        meme_id = kwargs['id']
+        meme_id = kwargs['meme_id']
         queryset_memes = Meme.objects.filter(pk=meme_id)
         if not queryset_memes:
             return HttpResponse(status=404, content_type="application/json")
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments', 'Comments'])
-        return HttpResponse(output, status=200,  content_type="application/json")
+        return HttpResponse(output, status=200, content_type="application/json")
 
 
-class LikeAddView(APIView):
+class LikeView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='ID of meme', required=True)
+        ],
+        responses={
+            '201': 'Like has been added',
+            '401': 'Unauthorized',
+            '404': 'Meme for like does not exist'
+        },
+        operation_id='Add like',
+        operation_description='Like meme by authorized user. Meme specified by meme_id',
+    )
     def post(self, *args, **kwargs):
-        meme_id = kwargs['id']
+        meme_id = kwargs['meme_id']
         user = self.request.user
         if not Meme.objects.filter(pk=meme_id).exists():
             return HttpResponse(status=404, content_type="application/json")
@@ -73,10 +129,53 @@ class LikeAddView(APIView):
         like.save()
         return Response(status=201)
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='ID of meme', required=True)
+        ],
+        responses={
+            '204': 'Like has been deleted',
+            '401': 'Unauthorized',
+            '404': 'Meme is not exist or was not like by authorized user'
+        },
+        operation_id='Delete like',
+        operation_description='Delete like for liked meme by authorized user. Meme specified by meme_id',
+    )
+    def delete(self, *args, **kwargs):
+        meme_id = kwargs['meme_id']
+        user = self.request.user
+        if not Meme.objects.filter(pk=meme_id).exists():
+            return HttpResponse(status=404, content_type="application/json")
+
+        meme = Meme.objects.get(pk=meme_id)
+        if not Like.objects.filter(user=user, meme=meme).exists():
+            return HttpResponse(status=404, content_type="application/json")
+
+        Like.objects.filter(user=user, meme=meme).delete()
+        return HttpResponse(status=204)
+
 
 class CommentAddView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='ID of meme', required=True)
+        ],
+        request_body=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                    properties={
+                                        'content': openapi.Schema(type=openapi.TYPE_STRING, description='Content of the comment'),
+                                    }),
+        responses={
+            '201': 'Comment added successfully',
+            '400': 'Cannot parse request body',
+            '401': 'Unauthorized'
+        },
+        operation_id='Add comment',
+        operation_description='Add comment to meme specified by meme_id',
+    )
     def post(self, *args, **kwargs):
         try:
             json_data = json.loads(json.dumps(self.request.data))
@@ -84,7 +183,7 @@ class CommentAddView(APIView):
             return HttpResponse(status=400)
 
         user = self.request.user
-        meme_id = kwargs['id']
+        meme_id = kwargs['meme_id']
         meme = Meme.objects.get(pk=meme_id)
         content = json_data['content']
         comment = Comment(user=user, meme=meme, content=content)
