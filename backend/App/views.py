@@ -2,6 +2,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import json
 from django.http import HttpResponse
@@ -25,7 +26,6 @@ class MemeGetAllView(APIView):
             '401': 'Unauthorized',
             '404': 'Memes not found'
         },
-        security=(AllowAny,),
         operation_id='Get list of 10 memes',
         operation_description='List of 10 memes, start with meme_id + 1',
     )
@@ -48,7 +48,8 @@ class MemeAddView(APIView):
         request_body=openapi.Schema(type=openapi.TYPE_OBJECT,
                                     properties={
                                         'title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of meme'),
-                                        'img_url': openapi.Schema(type=openapi.TYPE_STRING, description='URL of meme image'),
+                                        'img_url': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                  description='URL of meme image'),
                                     }),
         responses={
             '201': 'Meme added successfully',
@@ -166,7 +167,8 @@ class CommentAddView(APIView):
         ],
         request_body=openapi.Schema(type=openapi.TYPE_OBJECT,
                                     properties={
-                                        'content': openapi.Schema(type=openapi.TYPE_STRING, description='Content of the comment'),
+                                        'content': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                  description='Content of the comment'),
                                     }),
         responses={
             '201': 'Comment added successfully',
@@ -189,3 +191,37 @@ class CommentAddView(APIView):
         comment = Comment(user=user, meme=meme, content=content)
         comment.save()
         return Response(status=201)
+
+
+class UserView(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(type=openapi.TYPE_OBJECT,
+                                    properties={
+                                        'username': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                   description='Name of the user being created'),
+                                        'password': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                   description='Password of the user being created'),
+                                        'email': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                description='E-mail of the user being created'),
+
+                                    }),
+        responses={
+            '201': 'User created successfully',
+            '400': 'Cannot parse request body',
+            '409': 'A user of this name already exists'
+        },
+        operation_id='Create user',
+        operation_description='Create user specified by username, password and email',
+    )
+    def post(self, *args, **kwargs):
+        content = self.request.data
+        username = content['username']
+        password = content['password']
+        email = content['email']
+        if User.objects.filter(username=username).exists():
+            return HttpResponse(status=409)
+
+        User.objects.create_user(username=username, password=password, email=email)
+        return HttpResponse(status=201)
