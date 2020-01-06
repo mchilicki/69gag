@@ -4,10 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .serializers import ExtJsonSerializer, MemeSerializer
 from .models import Meme, Like, Comment
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # Create your views here.
@@ -17,28 +18,35 @@ class MemeGetAllView(APIView):
 
     @swagger_auto_schema(
         manual_parameters=[
-            openapi.Parameter('meme_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
-                              description='ID of meme', required=True)
+            openapi.Parameter('page_id', in_=openapi.IN_PATH, type=openapi.TYPE_INTEGER,
+                              description='page number', required=True)
         ],
         responses={
-            '200': 'Returned memes from range meme_id + 1 to meme_id + 11',
+            '200': 'Returned 10 memes from page id',
             '401': 'Unauthorized',
             '404': 'Memes not found'
         },
         security=(AllowAny,),
         operation_id='Get list of 10 memes',
-        operation_description='List of 10 memes, start with meme_id + 1',
+        operation_description='List of 10 memes, total pages indicator and current page id, page_id is requested page',
     )
     def get(self, *args, **kwargs):
-        read_id = kwargs['meme_id']
-        queryset_memes = list(Meme.objects.filter(pk__range=(read_id + 1, read_id + 11)))
-        if not queryset_memes:
-            return HttpResponse(status=404, content_type="application/json")
+        page_id = kwargs['page_id']
+        queryset_memes = list(Meme.objects.all())
+        paginator = Paginator(queryset_memes, 2)
+        try:
+            queryset_memes = paginator.page(page_id)
+        except PageNotAnInteger:
+            page_id = 1
+            queryset_memes = paginator.page(page_id)
+        except EmptyPage:
+            page_id = paginator.num_pages
+            queryset_memes = paginator.page(page_id)
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments'])
-
-        return HttpResponse(output, content_type="application/json")
+        data = {'results': json.loads(output), 'totalPages': paginator.num_pages, 'currentPage': page_id}
+        return JsonResponse(data, safe=False)
 
 
 class MemeAddView(APIView):
