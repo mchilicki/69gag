@@ -45,7 +45,14 @@ class MemeGetAllView(APIView):
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments'])
-        data = {'results': json.loads(output), 'totalPages': paginator.num_pages, 'currentPage': page_id}
+        jsonT = json.loads(output)
+        user = self.request.user
+        for idx, val in enumerate(jsonT):
+            jsonT[idx]['IsLiked'] = False
+            if user.id is not None:
+                if Like.objects.filter(user=user, meme_id=val['pk']).exists():
+                    jsonT[idx]['IsLiked'] = True
+        data = {'results': jsonT, 'totalPages': paginator.num_pages, 'currentPage': page_id}
         return JsonResponse(data, safe=False)
 
 
@@ -102,10 +109,17 @@ class MemeGetView(APIView):
         queryset_memes = Meme.objects.filter(pk=meme_id)
         if not queryset_memes:
             return HttpResponse(status=404, content_type="application/json")
+        user = self.request.user
+        isLiked = False
+        if user.id is not None:
+            if Like.objects.filter(user=user, meme_id=meme_id).exists():
+                isLiked = True
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments', 'Comments'])
-        return HttpResponse(output, status=200, content_type="application/json")
+        jsonT = json.loads(output)
+        jsonT[0]['IsLiked'] = isLiked
+        return JsonResponse(jsonT, safe=False)
 
 
 class LikeView(APIView):
