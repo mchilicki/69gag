@@ -1,0 +1,10 @@
+﻿<div class="card mt-4">
+    <h4 class="card-header">You're logged in 69Gag</h4>
+    <div class="card-body">
+        <h6>Memes -></h6>
+        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+        <ul *ngIf="memePage.results">
+            <li *ngFor="let meme of memePage.results">{{meme.img_url}} {{meme.title}}</li>
+        </ul>
+    </div>
+</div>
