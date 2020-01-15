@@ -14,6 +14,18 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
 
+def extractFields(output):
+    jsonT = json.loads(output)
+    cleaned_objects = []
+    for d in jsonT:
+        del d['model']
+        for key in d['fields']:
+            d[key] = d['fields'][key]
+        del d['fields']
+        cleaned_objects.append(d)
+    jsonT = cleaned_objects
+    return jsonT
+
 class MemeGetAllView(APIView):
     permission_classes = [AllowAny]
 
@@ -33,7 +45,7 @@ class MemeGetAllView(APIView):
     def get(self, *args, **kwargs):
         page_id = kwargs['page_id']
         queryset_memes = list(Meme.objects.all())
-        paginator = Paginator(queryset_memes, 2)
+        paginator = Paginator(queryset_memes, 10)
         try:
             queryset_memes = paginator.page(page_id)
         except PageNotAnInteger:
@@ -45,7 +57,7 @@ class MemeGetAllView(APIView):
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments'])
-        jsonT = json.loads(output)
+        jsonT = extractFields(output)
         user = self.request.user
         for idx, val in enumerate(jsonT):
             jsonT[idx]['IsLiked'] = False
@@ -117,7 +129,7 @@ class MemeGetView(APIView):
 
         output = ExtJsonSerializer().serialize(queryset_memes, fields=['title', 'img_url', 'date'],
                                                props=['userName', 'NumLikes', 'NumComments', 'Comments'])
-        jsonT = json.loads(output)
+        jsonT = extractFields(output)
         jsonT[0]['IsLiked'] = isLiked
         return JsonResponse(jsonT, safe=False)
 
