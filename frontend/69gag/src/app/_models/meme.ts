@@ -8,6 +8,6 @@ export interface Meme {
     userName: string;
     NumLikes: number;
     NumComments: number;
-    isLiked: boolean;
+    IsLiked: boolean;
     comments: Observable<Comment[]>;
 }

@@ -1,8 +1,8 @@
-﻿import { Observable } from 'rxjs';
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { User, Meme, MemePage } from '@app/_models';
-import { UserService, MemeService, AuthenticationService } from '@app/_services';
+import { MemePage } from '@app/_models';
+import { MemeService } from '@app/_services';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent {
@@ -10,7 +10,6 @@ export class HomeComponent {
     memePage: MemePage;
 
     constructor(
-        private userService: UserService,
         private memeService: MemeService) { }
 
     ngOnInit() {

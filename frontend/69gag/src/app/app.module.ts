@@ -9,6 +9,8 @@ import { appRoutingModule } from './app.routing';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
+import { MemeComponent } from './meme';
+import { LikesButtonsComponent } from './likes-buttons';
 
 @NgModule({
     imports: [
@@ -20,7 +22,9 @@ import { LoginComponent } from './login';
     declarations: [
         AppComponent,
         HomeComponent,
-        LoginComponent
+        LoginComponent,
+        MemeComponent,
+        LikesButtonsComponent,
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

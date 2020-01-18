@@ -1,0 +1,16 @@
+.left {
+    float: left !important;
+}
+
+.button-vote {
+    overflow: hidden;
+    width: 45px;
+    margin: 5px;
+}
+
+ul#horizontal button {
+    display: inline;
+}
+
+
+
