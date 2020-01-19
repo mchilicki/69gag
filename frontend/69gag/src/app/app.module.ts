@@ -11,7 +11,8 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { MemeComponent } from './meme';
 import { LikesButtonsComponent } from './likes-buttons';
-import { RegisterComponent } from './register/register.component'
+import { RegisterComponent } from './register/register.component';
+import { MemeDetailsComponent } from './meme-details';
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { RegisterComponent } from './register/register.component'
         MemeComponent,
         LikesButtonsComponent,
         RegisterComponent,
+        MemeDetailsComponent,
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

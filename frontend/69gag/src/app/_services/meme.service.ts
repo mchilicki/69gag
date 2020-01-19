@@ -13,6 +13,10 @@ export class MemeService {
     }
 
     getMemesPage(pageNumber: number) {
-        return this.http.get<MemePage>(endpoint.getMemePage + pageNumber)
+        return this.http.get<MemePage>(endpoint.getMemePage + pageNumber);
+    }
+
+    getMeme(memeId: number) {
+        return this.http.get<Meme>(endpoint.getMeme + memeId);
     }
 }
