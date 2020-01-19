@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import json
 from django.http import HttpResponse, JsonResponse
+from rest_framework.viewsets import ViewSet
 
 from .serializers import ExtJsonSerializer, MemeSerializer
 from .models import Meme, Like, Comment
@@ -26,6 +27,7 @@ def extractFields(output):
     jsonT = cleaned_objects
     return jsonT
 
+
 class MemeGetAllView(APIView):
     permission_classes = [AllowAny]
 
@@ -45,6 +47,7 @@ class MemeGetAllView(APIView):
     def get(self, *args, **kwargs):
         page_id = kwargs['page_id']
         queryset_memes = list(Meme.objects.all())
+        queryset_memes.reverse()
         paginator = Paginator(queryset_memes, 10)
         try:
             queryset_memes = paginator.page(page_id)
@@ -259,3 +262,23 @@ class UserView(APIView):
 
         User.objects.create_user(username=username, password=password, email=email)
         return HttpResponse(status=201)
+
+
+class UserInfoView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        responses={
+            '200': 'Returned info about user',
+            '401': 'Unauthorized',
+            '404': 'User not found'
+        },
+        operation_id='Get user info',
+        operation_description='Returns info about user',
+    )
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        if not User.objects.filter(username=user.username).exists():
+            return HttpResponse(status=404)
+
+        return JsonResponse({'login': user.username, 'email': user.email}, status=200)

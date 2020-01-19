@@ -52,4 +52,5 @@ urlpatterns = [
     path('like/<int:meme_id>', views.LikeView.as_view(), name='deletelike'),
     path('comment/<int:meme_id>', views.CommentAddView.as_view(), name='addcomment'),
     path('user/', UserView.as_view(), name='user'),
+    path('user_info/', views.UserInfoView.as_view(), name='user_info'),
 ]
