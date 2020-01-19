@@ -13,6 +13,7 @@ import { MemeComponent } from './meme';
 import { LikesButtonsComponent } from './likes-buttons';
 import { RegisterComponent } from './register/register.component';
 import { MemeDetailsComponent } from './meme-details';
+import { MemeCommentsComponent } from './meme-comments';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { MemeDetailsComponent } from './meme-details';
         LikesButtonsComponent,
         RegisterComponent,
         MemeDetailsComponent,
+        MemeCommentsComponent,
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
