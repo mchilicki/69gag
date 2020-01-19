@@ -2,5 +2,5 @@
     username: string;
     password: string;
     email: string;
-    token?: string;
+    access?: string;
 }

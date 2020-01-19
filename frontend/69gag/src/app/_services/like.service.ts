@@ -19,17 +19,13 @@ export class LikeService {
         }
     }
 
-    private like(meme: Meme) {
+    private async like(meme: Meme) {
         const url = endpoint.like + meme.pk;
-        try {
-            this.http.post(url, null);
-        } catch (err) {
-            console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-        }
+        return await this.http.post(url, {}).toPromise();
     }
 
-    private deleteLike(meme: Meme) {
+    private async deleteLike(meme: Meme) {
         const url = endpoint.deleteLike + meme.pk;
-        return this.http.delete(url);
+        return await this.http.delete(url).toPromise();
     }
 }
