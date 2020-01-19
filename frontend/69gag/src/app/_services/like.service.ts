@@ -13,9 +13,11 @@ export class LikeService {
         if (!meme.IsLiked) {
             this.like(meme);
             meme.IsLiked = true;
+            meme.NumLikes++;
         } else {
             this.deleteLike(meme);
             meme.IsLiked = false;
+            meme.NumLikes--;
         }
     }
 
