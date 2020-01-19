@@ -1,0 +1,10 @@
+<div>
+    <a *ngIf="!shouldDisplayDetails" href="meme/{{meme.pk}}">
+        <h4>
+            {{meme.title}}
+        </h4>
+    </a>
+    <img src="{{meme.img_url}}">
+    <app-likes-buttons [meme]="meme"></app-likes-buttons>
+    <app-meme-comments *ngIf="shouldDisplayDetails" [meme]="meme"></app-meme-comments>
+</div>

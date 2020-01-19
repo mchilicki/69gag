@@ -1,0 +1,8 @@
+<div>
+    <span>{{meme.NumLikes}} likes </span>
+    <span>{{meme.NumComments}} comments</span>
+</div>
+<div>
+    <button class="btn" [className]="meme.IsLiked ? 'btn-like-active' : 'btn-like-not-active'"
+        (click)="likeMeme()">Like</button>
+</div>

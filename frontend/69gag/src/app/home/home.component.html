@@ -1,0 +1,11 @@
+﻿<div class="card mt-4">
+    <h5 class="card-header">Memes</h5>
+    <div class="card-body">
+        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+        <div *ngIf="memePage && memePage.results">
+            <div *ngFor="let meme of memePage.results">
+                <app-meme [meme]="meme"></app-meme>
+            </div>            
+        </div>
+    </div>
+</div>
