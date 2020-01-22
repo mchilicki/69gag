@@ -8,7 +8,7 @@ import { Meme, MemePage } from '@app/_models';
 export class MemeService {
     constructor(private http: HttpClient) { }
 
-    create(meme: Meme) {
+    create(meme) {
         return this.http.post<Meme>(endpoint.addMeme, meme);
     }
 
