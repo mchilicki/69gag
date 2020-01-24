@@ -9,5 +9,5 @@ export interface Meme {
     NumLikes: number;
     NumComments: number;
     IsLiked: boolean;
-    comments: Observable<Comment[]>;
+    Comments: Observable<Comment[]>;
 }

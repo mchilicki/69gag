@@ -1,10 +1,10 @@
 <div>
-    <a *ngIf="!shouldDisplayDetails" href="meme/{{meme.pk}}">
+    <a *ngIf="!shouldDisplayDetails && meme" href="meme/{{meme.pk}}">
         <h4>
             {{meme.title}}
         </h4>
     </a>
     <img src="{{meme.img_url}}" class="mb-3 img-fluid">
-    <app-likes-buttons [meme]="meme"></app-likes-buttons>
-    <app-meme-comments *ngIf="shouldDisplayDetails" [meme]="meme"></app-meme-comments>
+    <app-likes-buttons *ngIf="meme" [meme]="meme"></app-likes-buttons>
+    <app-meme-comments *ngIf="shouldDisplayDetails && meme" [meme]="meme"></app-meme-comments>
 </div>
