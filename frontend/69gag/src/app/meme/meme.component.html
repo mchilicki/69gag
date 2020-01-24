@@ -4,7 +4,7 @@
             {{meme.title}}
         </h4>
     </a>
-    <img src="{{meme.img_url}}">
+    <img src="{{meme.img_url}}" class="mb-3 img-fluid">
     <app-likes-buttons [meme]="meme"></app-likes-buttons>
     <app-meme-comments *ngIf="shouldDisplayDetails" [meme]="meme"></app-meme-comments>
 </div>
