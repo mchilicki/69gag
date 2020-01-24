@@ -5,12 +5,14 @@ import { LoginComponent } from './login';
 import { AuthGuard } from './_helpers';
 import { RegisterComponent } from './register/register.component';
 import { MemeDetailsComponent } from './meme-details';
+import { AddMemeComponent } from './add-meme/add-meme.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'meme/:id', component: MemeDetailsComponent },
+    { path: 'addmeme', component: AddMemeComponent, canActivate: [AuthGuard] },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
