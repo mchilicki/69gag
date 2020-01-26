@@ -1,6 +1,15 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://127.0.0.1:8000/'
+    apiUrl: 'http://127.0.0.1:8000/',
+    firebase: {
+        apiKey: 'AIzaSyCyx7voYVyJRnSmx4Xse7DUu8P6nV_BPWM',
+        authDomain: 'gag-6761d.firebaseapp.com',
+        databaseURL: 'https://gag-6761d.firebaseio.com',
+        projectId: 'gag-6761d',
+        storageBucket: 'gag-6761d.appspot.com',
+        messagingSenderId: '820871007640',
+        appId: '1:820871007640:web:11c37fc8ad56354eb36fed'
+    }
 };
 
 export const endpoint = {
