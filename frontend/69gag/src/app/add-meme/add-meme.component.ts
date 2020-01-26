@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { flatMap, finalize } from 'rxjs/operators';
 import { Meme } from '@app/_models/meme'
+import { Observable, timer } from 'rxjs';
 
 @Component({
   selector: 'app-add-meme',
@@ -17,6 +18,7 @@ export class AddMemeComponent implements OnInit {
   loading = false
   returnUrl: string
   error = ''
+  success = ''
   display = null
   file = null
   uploadPercent
@@ -55,6 +57,17 @@ export class AddMemeComponent implements OnInit {
   }
 
   uploadPost(formValue) {
+    if (!this.file) {
+      this.error = "File can't be empty"
+      return
+    } else {
+      this.error = ''
+    }
+    if (this.registryForm.controls.title.value < 5 || this.registryForm.controls.title.value > 30) {
+      this.registryForm.controls.title.markAsTouched()
+      return
+    }
+    this.loading = true
     const filePath = Math.random().toString(36).substring(7)
     const fileRef = this.firebaseStorage.ref(filePath)
     const task = this.firebaseStorage.upload(filePath, this.file)
@@ -74,7 +87,7 @@ export class AddMemeComponent implements OnInit {
               "title": this.registryForm.controls.title.value,
               "img_url": downloadURL
             }).subscribe(() => {
-              this.router.navigate([''])
+              this.displaySuccessAndNavigate()
             },
               (error) => {
                 this.error = error
@@ -86,4 +99,14 @@ export class AddMemeComponent implements OnInit {
       .subscribe()
   }
 
+  displaySuccessAndNavigate() {
+    this.success = 'Upload successfull'
+    timer(1000)
+      .subscribe(() => {
+        this.router.navigate([''])
+      })
+  }
+
+  submit() {
+  }
 }
