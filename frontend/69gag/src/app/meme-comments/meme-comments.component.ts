@@ -2,10 +2,9 @@ import { Component, Input } from '@angular/core';
 
 import { Meme } from '@app/_models';
 
-@Component({ selector: 'app-meme', templateUrl: 'meme.component.html' })
-export class MemeComponent {
+@Component({ selector: 'app-meme-comments', templateUrl: 'meme-comments.component.html' })
+export class MemeCommentsComponent {
     @Input() meme: Meme;
-    @Input() shouldDisplayDetails = false;
 
     constructor() { }
 

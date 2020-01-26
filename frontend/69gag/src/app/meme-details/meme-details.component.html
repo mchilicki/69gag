@@ -1,1 +1,6 @@
-<app-meme *ngIf="meme" [meme]="meme"></app-meme>
+<div class="card mt-4">
+    <h5 class="card-header">{{meme.title}}</h5>
+    <div class="card-body">
+        <app-meme *ngIf="meme" [meme]="meme" [shouldDisplayDetails]="true"></app-meme>
+    </div>
+</div>
