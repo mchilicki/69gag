@@ -1,5 +1,5 @@
 <div>
-    <div>
+    <div *ngIf="currentUser">
         <label>Add comment</label>
         <textarea type="text" class="form-control" cols="50" rows="3" (keyup)="onCommentKey($event)"></textarea>
         <button class="btn btn-primary post-comment-btn" (click)="postComment()">Post</button>

@@ -20,4 +20,5 @@ export const endpoint = {
     like: environment.apiUrl + 'like/',
     meme: environment.apiUrl + 'meme/',
     registerUser: environment.apiUrl + 'user/',
+    userInfo: environment.apiUrl + 'user_info/',
 };
