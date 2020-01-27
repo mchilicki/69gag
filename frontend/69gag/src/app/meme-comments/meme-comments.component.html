@@ -1,3 +1,13 @@
-<p>
-    Comments here
-</p>
+<div>
+    <div *ngIf="currentUser">
+        <label>Add comment</label>
+        <textarea type="text" class="form-control" cols="50" rows="3" (keyup)="onCommentKey($event)"></textarea>
+        <button class="btn btn-primary post-comment-btn" (click)="postComment()">Post</button>
+    </div>
+    <br/>
+    <div *ngFor="let comment of meme.Comments"> 
+        <label><b>{{comment.user__username}}</b></label>
+        <div>{{comment.content}}</div>
+        <hr/>
+    </div>
+</div>

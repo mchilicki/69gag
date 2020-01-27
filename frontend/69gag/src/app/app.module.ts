@@ -37,8 +37,8 @@ import { MemeCommentsComponent } from './meme-comments';
         LikesButtonsComponent,
         RegisterComponent,
         MemeDetailsComponent,
+        MemeCommentsComponent,
         AddMemeComponent,
-        MemeCommentsComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

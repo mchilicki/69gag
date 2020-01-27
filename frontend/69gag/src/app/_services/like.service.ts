@@ -27,7 +27,7 @@ export class LikeService {
     }
 
     private async deleteLike(meme: Meme) {
-        const url = endpoint.deleteLike + meme.pk;
+        const url = endpoint.like + meme.pk;
         return await this.http.delete(url).toPromise();
     }
 }

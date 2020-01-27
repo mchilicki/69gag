@@ -18,8 +18,7 @@ export const endpoint = {
     apiToken: environment.apiUrl + 'api/token/',
     comment: environment.apiUrl + 'comment/',
     like: environment.apiUrl + 'like/',
-    deleteLike: environment.apiUrl + 'like/',
-    addMeme: environment.apiUrl + 'meme/',
-    getMeme: environment.apiUrl + 'meme/',
-    registerUser: environment.apiUrl + 'user/'
+    meme: environment.apiUrl + 'meme/',
+    registerUser: environment.apiUrl + 'user/',
+    userInfo: environment.apiUrl + 'user_info/',
 };
