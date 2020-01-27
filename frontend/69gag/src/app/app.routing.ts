@@ -9,6 +9,7 @@ import { AddMemeComponent } from './add-meme/add-meme.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
+    { path: 'page/:pageNumber', component: HomeComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'meme/:id', component: MemeDetailsComponent },

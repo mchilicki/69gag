@@ -9,6 +9,37 @@
                     <hr/>
                 </div>            
             </div>
+            <nav *ngIf="memePage && memePage.currentPage != memePage.totalPages">
+                <ul class="pagination">
+                    <li class="page-item" *ngIf="memePage.currentPage - 1 >= 1 && memePage.currentPage <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage - 1}}">Previous</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage - 3 >= 1 && memePage.currentPage <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage - 3}}">{{memePage.currentPage - 3}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage - 2 >= 1 && memePage.currentPage <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage - 2}}">{{memePage.currentPage - 2}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage - 1 >= 1 && memePage.currentPage <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage - 1}}">{{memePage.currentPage - 1}}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" nohref>{{memePage.currentPage}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage >= 1 && memePage.currentPage && memePage.currentPage + 1 <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage + 1}}">{{memePage.currentPage + 1}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage >= 1 && memePage.currentPage && memePage.currentPage + 2 <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage + 2}}">{{memePage.currentPage + 2}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage >= 1 && memePage.currentPage && memePage.currentPage + 3 <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage + 3}}">{{memePage.currentPage + 3}}</a>
+                    </li>
+                    <li class="page-item" *ngIf="memePage.currentPage >= 1 && memePage.currentPage && memePage.currentPage + 1 <= memePage.totalPages">
+                        <a class="page-link" href="page/{{memePage.currentPage + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
