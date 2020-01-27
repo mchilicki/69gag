@@ -9,7 +9,7 @@ export class MemeService {
     constructor(private http: HttpClient) { }
 
     create(meme) {
-        return this.http.post<Meme>(endpoint.addMeme, meme);
+        return this.http.post<Meme>(endpoint.meme, meme);
     }
 
     getMemesPage(pageNumber: number) {
@@ -17,6 +17,6 @@ export class MemeService {
     }
 
     getMeme(memeId: number) {
-        return this.http.get<Meme>(endpoint.getMeme + memeId);
+        return this.http.get<Meme>(endpoint.meme + memeId);
     }
 }

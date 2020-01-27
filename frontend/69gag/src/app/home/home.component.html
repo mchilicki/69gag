@@ -6,6 +6,7 @@
             <div *ngIf="memePage && memePage.results">
                 <div *ngFor="let meme of memePage.results">
                     <app-meme [meme]="meme"></app-meme>
+                    <hr/>
                 </div>            
             </div>
         </div>
