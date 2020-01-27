@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="password">RepeatPassword</label>
+          <label for="password">Repeat Password</label>
           <input type="password" formControlName="repeatPassword" class="form-control"
             [ngClass]="{ 'is-invalid': !registryForm.controls['repeatPassword'].valid && registryForm.controls['repeatPassword'].touched }" />
           <div *ngIf="!registryForm.controls['repeatPassword'].valid && registryForm.controls['repeatPassword'].touched"
