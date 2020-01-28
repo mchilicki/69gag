@@ -32,9 +32,7 @@ export class AddMemeComponent implements OnInit {
     private firebaseStorage: AngularFireStorage) {
     this.registryForm = _fb.group({
       'title': [null, Validators.compose([
-        Validators.required,
-        Validators.maxLength(30),
-        Validators.minLength(5)
+        Validators.required
       ])],
       'image': [null, Validators.compose([
         Validators.required
@@ -105,8 +103,5 @@ export class AddMemeComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate([''])
       })
-  }
-
-  submit() {
   }
 }
