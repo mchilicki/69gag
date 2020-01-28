@@ -9,7 +9,7 @@
                     <hr/>
                 </div>            
             </div>
-            <nav *ngIf="memePage && memePage.currentPage != memePage.totalPages">
+            <nav *ngIf="memePage && memePage.totalPages != 1">
                 <ul class="pagination">
                     <li class="page-item" *ngIf="memePage.currentPage - 1 >= 1 && memePage.currentPage <= memePage.totalPages">
                         <a class="page-link" href="page/{{memePage.currentPage - 1}}">Previous</a>
