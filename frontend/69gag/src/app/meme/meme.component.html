@@ -3,8 +3,11 @@
         <h4>
             {{meme.title}}
         </h4>
+        <img src="{{meme.img_url}}" class="mb-3 img-fluid">  
     </a>
-    <img src="{{meme.img_url}}" class="mb-3 img-fluid">
+
+    <img *ngIf="shouldDisplayDetails && meme" src="{{meme.img_url}}" class="mb-3 img-fluid">    
+    
     <app-likes-buttons *ngIf="meme" [meme]="meme"></app-likes-buttons>
     <app-meme-comments *ngIf="shouldDisplayDetails && meme" [meme]="meme"></app-meme-comments>
 </div>

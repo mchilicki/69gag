@@ -3,6 +3,7 @@
     <span>{{meme.NumComments}} comments</span>
 </div>
 <div *ngIf="currentUser">
-    <button class="btn btn-secondary" [className]="meme.IsLiked ? 'btn-like-active' : 'btn-like-not-active'"
-        (click)="likeMeme()">Like</button>
+    <button [className]="meme.IsLiked ? 'btn btn-primary' : 'btn btn-secondary'" (click)="likeMeme()">
+        Like
+    </button>
 </div>
